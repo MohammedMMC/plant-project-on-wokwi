@@ -111,7 +111,7 @@
     [ "pico:GP9", "wokwi-ky-040-0:SW", "violet", [ "h-38.4", "v-172.8" ] ],
     [ "pico:3V3", "pot1:VCC", "red", [ "h0" ] ],
     [ "pico:GND.8", "pot1:GND", "black", [ "h0" ] ],
-    [ "pot1:SIG", "pico:GP21", "green", [ "v0" ] ]
+    [ "pico:GP20", "pot1:SIG", "green", [ "h0" ] ]
   ],
   "dependencies": {}
 }
