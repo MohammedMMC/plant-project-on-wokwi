@@ -12,11 +12,17 @@
 #define RGB_G_PIN 7
 #define RGB_B_PIN 8
 
+#define ENCODER_CLK 2
+#define ENCODER_DT  3
+#define ENCODER_BTN 9
+
 DHT dht(DHT22_PIN, DHT22);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 int led_r = 0, led_g = 0, led_b = 0;
 
+char selectedColor = 'R'; // R, G and B
+bool isColorSelected = false;
 
 void setup() {
   // put your setup code here, to run once:
@@ -33,12 +39,47 @@ void setup() {
   pinMode(RGB_R_PIN, OUTPUT);
   pinMode(RGB_G_PIN, OUTPUT);
   pinMode(RGB_B_PIN, OUTPUT);
+
+  pinMode(ENCODER_CLK, INPUT);
+  pinMode(ENCODER_DT, INPUT);
+  pinMode(ENCODER_BTN, INPUT_PULLUP);
+
+  attachInterrupt(digitalPinToInterrupt(ENCODER_CLK), readEncoder, FALLING);
 }
+
+
 void loop() {
   // put your main code here, to run repeatedly:
   displayScreen();
   rgblight();
-  delay(100); // this speeds up the simulation
+
+  if (digitalRead(ENCODER_BTN) == LOW) {
+    isColorSelected = !isColorSelected;
+  }
+  delay(10); // this speeds up the simulation
+}
+
+void readEncoder() {
+  if (isColorSelected) return;
+  int dtValue = digitalRead(ENCODER_DT);
+  if (dtValue == HIGH) {
+    if(selectedColor == 'R') {
+      selectedColor = 'G';
+    } else if (selectedColor == 'G') {
+      selectedColor = 'B';
+    } else if (selectedColor == 'B') {
+      selectedColor = 'R';
+    }
+  }
+  if (dtValue == LOW) {
+    if(selectedColor == 'R') {
+      selectedColor = 'B';
+    } else if (selectedColor == 'G') {
+      selectedColor = 'R';
+    } else if (selectedColor == 'B') {
+      selectedColor = 'G';
+    }
+  }
 }
 
 
@@ -55,7 +96,7 @@ void displayScreen() {
 
   // Clear the screen
   display.clearDisplay();
-  display.setTextColor(WHITE);        
+  display.setTextColor(WHITE);
 
   // Display (Humidity and Temperature) 
   display.setTextSize(1);
@@ -77,23 +118,43 @@ void displayScreen() {
     display.drawLine(SCREEN_WIDTH / 3 * i, 25, 
       SCREEN_WIDTH / 3 * i, SCREEN_HEIGHT, WHITE);
   }
+  if (isColorSelected) {
+    display.fillRoundRect(
+    SCREEN_WIDTH / 3 * (selectedColor == 'G' ? 1 : selectedColor == 'B' ? 2 : 0) + 3,
+    SCREEN_HEIGHT / 2 - 3,
+    SCREEN_WIDTH / 3 - 5,
+    SCREEN_WIDTH / 3 - 8,
+    3, WHITE);
+  } else {
+    display.drawRoundRect(
+    SCREEN_WIDTH / 3 * (selectedColor == 'G' ? 1 : selectedColor == 'B' ? 2 : 0) + 3,
+    SCREEN_HEIGHT / 2 - 3,
+    SCREEN_WIDTH / 3 - 5,
+    SCREEN_WIDTH / 3 - 8,
+    3, WHITE);
+  }
 
   display.setTextSize(2);
   display.setCursor(0 + 16, (SCREEN_HEIGHT + 10) / 2);
+  display.setTextColor(selectedColor == 'R' && isColorSelected ? BLACK : WHITE);
   display.println("R");
   display.setCursor(SCREEN_WIDTH / 3 + 16, (SCREEN_HEIGHT + 10) / 2);
+  display.setTextColor(selectedColor == 'G' && isColorSelected ? BLACK : WHITE);
   display.println("G");
   display.setCursor(SCREEN_WIDTH / 3 * 2 + 16, (SCREEN_HEIGHT + 10) / 2);
+  display.setTextColor(selectedColor == 'B' && isColorSelected ? BLACK : WHITE);
   display.println("B");
 
   display.setTextSize(1);
   display.setCursor(0 + 18, (SCREEN_HEIGHT + 45) / 2);
+  display.setTextColor(selectedColor == 'R' && isColorSelected ? BLACK : WHITE);
   display.println(String(led_r));
   display.setCursor(SCREEN_WIDTH / 3 + 18, (SCREEN_HEIGHT + 45) / 2);
+  display.setTextColor(selectedColor == 'G' && isColorSelected ? BLACK : WHITE);
   display.println(String(led_g));
   display.setCursor(SCREEN_WIDTH / 3 * 2 + 18, (SCREEN_HEIGHT + 45) / 2);
+  display.setTextColor(selectedColor == 'B' && isColorSelected ? BLACK : WHITE);
   display.println(String(led_b));
 
-  
   display.display();
 }
