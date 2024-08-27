@@ -5,14 +5,20 @@
   "parts": [
     { "type": "board-pi-pico-w", "id": "pico", "top": -32.05, "left": -63.65, "attrs": {} },
     { "type": "wokwi-ky-040", "id": "wokwi-ky-040-0", "top": -113.5, "left": -221.6, "attrs": {} },
-    { "type": "wokwi-rgb-led", "id": "wokwi-rgb-led-0", "top": -5.6, "left": -181.3, "attrs": {} },
-    { "type": "wokwi-buzzer", "id": "wokwi-buzzer-0", "top": 50.4, "left": -161.4, "attrs": {} },
+    {
+      "type": "wokwi-rgb-led",
+      "id": "wokwi-rgb-led-0",
+      "top": 4,
+      "left": -229.3,
+      "attrs": { "common": "cathode" }
+    },
+    { "type": "wokwi-buzzer", "id": "wokwi-buzzer-0", "top": -36, "left": -171, "attrs": {} },
     {
       "type": "wokwi-dht22",
       "id": "wokwi-dht22-0",
       "top": -201.3,
       "left": 13.8,
-      "attrs": { "humidity": "38.5", "temperature": "69.9" }
+      "attrs": { "humidity": "100", "temperature": "80" }
     },
     {
       "type": "board-ssd1306",
@@ -28,8 +34,44 @@
       "left": 79.02,
       "attrs": {}
     },
-    { "type": "wokwi-rgb-led", "id": "rgb1", "top": -5.6, "left": -229.3, "attrs": {} },
-    { "type": "wokwi-rgb-led", "id": "rgb2", "top": -5.6, "left": -267.7, "attrs": {} }
+    {
+      "type": "wokwi-rgb-led",
+      "id": "rgb1",
+      "top": 4,
+      "left": -267.7,
+      "attrs": { "common": "cathode" }
+    },
+    {
+      "type": "wokwi-rgb-led",
+      "id": "rgb2",
+      "top": 4,
+      "left": -306.1,
+      "attrs": { "common": "cathode" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 120,
+      "left": -278.95,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 120,
+      "left": -317.35,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": 120,
+      "left": -240.55,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    }
   ],
   "connections": [
     [ "pico:GP0", "$serialMonitor:RX", "", [] ],
@@ -47,7 +89,22 @@
     [ "wokwi-ky-040-0:GND", "wokwi-dht22-0:GND", "black", [ "h0" ] ],
     [ "wokwi-ky-040-0:VCC", "wokwi-dht22-0:VCC", "red", [ "h0" ] ],
     [ "pico:GP4", "board-ssd1306-0:SDA", "orange", [ "h-19.2", "v153.6", "h182.4" ] ],
-    [ "board-ssd1306-0:SCL", "pico:GP5", "gold", [ "v-28.8", "h-182.1", "v-144" ] ]
+    [ "board-ssd1306-0:SCL", "pico:GP5", "gold", [ "v-28.8", "h-182.1", "v-144" ] ],
+    [ "rgb2:COM", "r2:1", "black", [ "v0" ] ],
+    [ "rgb1:COM", "r1:1", "black", [ "v0" ] ],
+    [ "r3:1", "wokwi-rgb-led-0:COM", "black", [ "h0" ] ],
+    [ "rgb2:R", "rgb1:R", "red", [ "v19.2", "h38.4" ] ],
+    [ "wokwi-rgb-led-0:R", "rgb1:R", "red", [ "v19.2", "h-38.4" ] ],
+    [ "rgb2:G", "rgb1:G", "green", [ "v28.8", "h39.7" ] ],
+    [ "rgb1:G", "wokwi-rgb-led-0:G", "green", [ "v28.8", "h39.7" ] ],
+    [ "rgb2:B", "rgb1:B", "blue", [ "v38.4", "h40" ] ],
+    [ "rgb1:B", "wokwi-rgb-led-0:B", "blue", [ "v38.4", "h40" ] ],
+    [ "r2:2", "r1:2", "black", [ "h0", "v8.4", "h38.4" ] ],
+    [ "r3:2", "r1:2", "black", [ "h0", "v8.4", "h-38.4" ] ],
+    [ "r3:2", "pico:GND.4", "black", [ "h0", "v8.4", "h76.8", "v-19.2" ] ],
+    [ "pico:GP6", "wokwi-rgb-led-0:R", "red", [ "h0" ] ],
+    [ "pico:GP7", "wokwi-rgb-led-0:G", "green", [ "h0" ] ],
+    [ "pico:GP8", "wokwi-rgb-led-0:B", "blue", [ "h0" ] ]
   ],
   "dependencies": {}
 }
