@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "author": "The Bin - Hack Club",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-pi-pico-w", "id": "pico", "top": -32.05, "left": -63.65, "attrs": {} },
+    { "type": "wokwi-ky-040", "id": "wokwi-ky-040-0", "top": -113.5, "left": -221.6, "attrs": {} },
+    { "type": "wokwi-rgb-led", "id": "wokwi-rgb-led-0", "top": -5.6, "left": -181.3, "attrs": {} },
+    { "type": "wokwi-buzzer", "id": "wokwi-buzzer-0", "top": 50.4, "left": -161.4, "attrs": {} },
+    {
+      "type": "wokwi-dht22",
+      "id": "wokwi-dht22-0",
+      "top": -201.3,
+      "left": 13.8,
+      "attrs": { "humidity": "38.5", "temperature": "69.9" }
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "board-ssd1306-0",
+      "top": 214.34,
+      "left": 38.63,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pir-motion-sensor",
+      "id": "wokwi-pir-motion-sensor-0",
+      "top": -101.6,
+      "left": 79.02,
+      "attrs": {}
+    },
+    { "type": "wokwi-rgb-led", "id": "rgb1", "top": -5.6, "left": -229.3, "attrs": {} },
+    { "type": "wokwi-rgb-led", "id": "rgb2", "top": -5.6, "left": -267.7, "attrs": {} }
+  ],
+  "connections": [
+    [ "pico:GP0", "$serialMonitor:RX", "", [] ],
+    [ "pico:GP1", "$serialMonitor:TX", "", [] ],
+    [ "pico:GP28", "wokwi-dht22-0:SDA", "gold", [ "h0" ] ],
+    [ "pico:3V3", "wokwi-dht22-0:VCC", "red", [ "h0" ] ],
+    [ "wokwi-dht22-0:GND", "pico:GND.8", "black", [ "v0" ] ],
+    [ "board-ssd1306-0:GND", "pico:GND.8", "black", [ "v0" ] ],
+    [ "board-ssd1306-0:VCC", "pico:3V3", "red", [ "v0" ] ],
+    [ "pico:GND.4", "wokwi-buzzer-0:1", "black", [ "h0" ] ],
+    [ "wokwi-buzzer-0:2", "pico:GP13", "red", [ "v0" ] ],
+    [ "wokwi-pir-motion-sensor-0:VCC", "pico:3V3", "red", [ "v0" ] ],
+    [ "wokwi-pir-motion-sensor-0:GND", "pico:GND.8", "black", [ "v0" ] ],
+    [ "wokwi-pir-motion-sensor-0:OUT", "pico:GP22", "green", [ "v0" ] ],
+    [ "wokwi-ky-040-0:GND", "wokwi-dht22-0:GND", "black", [ "h0" ] ],
+    [ "wokwi-ky-040-0:VCC", "wokwi-dht22-0:VCC", "red", [ "h0" ] ],
+    [ "pico:GP4", "board-ssd1306-0:SDA", "orange", [ "h-19.2", "v153.6", "h182.4" ] ],
+    [ "board-ssd1306-0:SCL", "pico:GP5", "gold", [ "v-28.8", "h-182.1", "v-144" ] ]
+  ],
+  "dependencies": {}
+}
